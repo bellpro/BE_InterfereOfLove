@@ -1,5 +1,6 @@
 package com.example.loveadviser.model;
 
+import com.example.loveadviser.dto.SignupRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +27,9 @@ public class User {
     @Column (nullable = false)
     private String password;
 
-    @Builder
-    public User(Long user_id, String username, String nickname, String password) {
-        this.user_id = user_id;
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
+    public User(SignupRequestDto signupRequestDto, String encodePassword ) {
+        this.username = signupRequestDto.getUsername();
+        this.nickname = signupRequestDto.getNickname();
+        this.password = encodePassword;
     }
 }
