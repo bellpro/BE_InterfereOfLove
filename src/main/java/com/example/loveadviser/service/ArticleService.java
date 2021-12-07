@@ -1,5 +1,6 @@
 package com.example.loveadviser.service;
 
+import com.example.loveadviser.dto.ArticleDto;
 import com.example.loveadviser.dto.ArticleRequestDto;
 import com.example.loveadviser.dto.ArticleResponseDto;
 import com.example.loveadviser.model.Article;
@@ -18,10 +19,10 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     //전체 게시글 조회
-    public List<ArticleResponseDto> getArticles() {
+    public List<ArticleDto> getArticles() {
         //작성날짜기준 내림차순
         List<Article> articles = articleRepository.findAll(Sort.by(Sort.Direction.DESC,"createDate"));
-        return ArticleResponseDto.listOf(articles);
+        return ArticleDto.listOf(articles);
 
     }
 
