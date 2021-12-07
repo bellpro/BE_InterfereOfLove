@@ -6,14 +6,24 @@ import com.example.loveadviser.model.Article;
 import com.example.loveadviser.model.User;
 import com.example.loveadviser.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
+
+    //전체 게시글 조회
+    public List<ArticleResponseDto> getArticles() {
+        //작성날짜기준 내림차순
+        List<Article> articles = articleRepository.findAll(Sort.by(Sort.Direction.DESC,"createDate"));
+        return ArticleResponseDto.listOf(articles);
+
+    }
 
     @Transactional  // 메소드 SQL 쿼리문 선언
     public void createArticle(User user, ArticleRequestDto articleRequestDto) {
