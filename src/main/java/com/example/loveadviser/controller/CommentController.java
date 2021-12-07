@@ -1,5 +1,6 @@
 package com.example.loveadviser.controller;
 
+import com.example.loveadviser.dto.CommentRequestDto;
 import com.example.loveadviser.dto.CommentResponseDto;
 import com.example.loveadviser.model.Article;
 import com.example.loveadviser.model.Comment;
@@ -38,7 +39,8 @@ public class CommentController {
         String comm = comment;
         Article article = articleRepository.findById(article_id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다.."));
-        commentService.save(user, article, comm);
+        CommentRequestDto requestDto = new CommentRequestDto(user, article, comm);
+        commentService.save(requestDto);
     }
 
     // 댓글 삭제하기

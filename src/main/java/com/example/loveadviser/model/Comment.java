@@ -28,11 +28,15 @@ public class Comment extends Timestamped {
     @Column
     private Long recommend;
 
+    @Column
+    private Long likeCount;
 
-    // 코멘트 기본 생성자 생성
+
+    // 코멘트 생성자
     public Comment(User user, Article article, String content) {
         this.user = user;
         this.article = article;
         this.content = content;
+        this.likeCount = 0L;
     }
 }

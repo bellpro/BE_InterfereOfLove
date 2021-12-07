@@ -1,8 +1,15 @@
 package com.example.loveadviser.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@NoArgsConstructor
+@Setter
+@Getter
 public class CommentResponseDto {
     private Long comment_id;
     private String nickname;
