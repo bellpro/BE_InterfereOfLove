@@ -21,10 +21,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
-        web
-                .ignoring()
-                .antMatchers("/h2-console/**");
     }
 
     @Override
@@ -35,34 +31,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .ignoringAntMatchers("/api/sign_up/check_dup").ignoringAntMatchers("/user/signup");
 
         http.authorizeRequests()
-                // image 폴더를 login 없이 허용
-                .antMatchers("/images/**").permitAll()
-                // css 폴더를 login 없이 허용
-                .antMatchers("/css/**").permitAll()
                 // 회원 관리 처리 API 전부를 login 없이 허용
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/user/signup").permitAll()
-                // 게시글 목록, 상세 게시글 보는 것을 login 없이 허용
-                .antMatchers("/api/contents").permitAll()
-                .antMatchers("/content/**").permitAll()
-                .antMatchers("/api/sign_up/check_dup").permitAll()
+//                .antMatchers("/user/**").permitAll()
+//                .antMatchers("/signup").permitAll()
+//                .antMatchers("/login/**").permitAll()
                 // Swagger
                 .antMatchers("/swagger-ui.html", "/swagger/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
-                // 메인페이지 API를 login 없이 허용
-                .antMatchers("/").permitAll()
                 // 그 외 어떤 요청이든 '인증'
                 .anyRequest().authenticated()
                 .and()
                     // [로그인 기능]
                     .formLogin()
-                    // 로그인 View 제공 (GET /user/login)
-                    .loginPage("/user/login")
-                    // 로그인 처리 (POST /user/login)
-                    .loginProcessingUrl("/user/login")
                     // 로그인 처리 후 성공 시 URL
                     .defaultSuccessUrl("/")
-                    // 로그인 처리 후 실패 시 URL
-                    .failureUrl("/user/login?error")
+
                     .permitAll()
                 .and()
                     // [로그아웃 기능]
