@@ -28,7 +28,7 @@ public class ArticleResponseDto {
                     article.getType(),
                     article.getUser().getNickname(),
                     article.getTitle(),
-                    article.getCreatedAt()
+                    article.getCreateDate()
             );
             articleResponseDtos.add(articleResponseDto);
         }

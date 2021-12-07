@@ -26,9 +26,6 @@ public class Comment extends Timestamped {
     private String content;
 
     @Column
-    private Long recommend;
-
-    @Column
     private Long likeCount;
 
 

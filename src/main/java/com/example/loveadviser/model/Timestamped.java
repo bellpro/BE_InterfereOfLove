@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 public abstract class Timestamped {
 
     @CreatedDate // 생성일자임을 나타냄
-    private LocalDateTime createdAt;
+    private LocalDateTime createDate;
 
     @LastModifiedDate // 마지막 수정일자임을 나타냄
-    private LocalDateTime modifiedAt;
+    private LocalDateTime modifieDate;
 }
 

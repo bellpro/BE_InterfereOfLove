@@ -36,9 +36,9 @@ public class CommentService {
             Long comment_id = com.getComment_id();
             String nickname = com.getUser().getNickname();
             String comment = com.getContent();
-            LocalDateTime createAt = com.getCreatedAt();
+            LocalDateTime createAt = com.getCreateDate();
 
-            Optional<Long> likeCommentCount = likeCommentRepository.findAllByComment(com);
+            Long likeCommentCount = (long)likeCommentRepository.findAllByComment(com).size();
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment_id, nickname, comment, likeCommentCount, createAt);
             comments.add(commentResponseDto);
         }

@@ -1,13 +1,11 @@
 package com.example.loveadviser.model;
 
 import com.example.loveadviser.dto.SignupRequestDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
@@ -27,9 +25,17 @@ public class User {
     @Column (nullable = false)
     private String password;
 
+
     public User(SignupRequestDto signupRequestDto, String encodePassword ) {
         this.username = signupRequestDto.getUsername();
         this.nickname = signupRequestDto.getNickname();
         this.password = encodePassword;
     }
+
+    public User(String username, String nickname, String password) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+    }
+
 }

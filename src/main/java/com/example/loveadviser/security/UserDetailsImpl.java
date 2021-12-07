@@ -2,8 +2,10 @@ package com.example.loveadviser.security;
 
 import com.example.loveadviser.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
@@ -50,6 +52,13 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        UserRoleEnum userRole = user.getRole();
+        String authority = userRole.getAuthority();
+
+        SimpleGrantedAuthority simpleAuthority = new SimpleGrantedAuthority(authority);
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(simpleAuthority);
+
+        return authorities;
     }
 }

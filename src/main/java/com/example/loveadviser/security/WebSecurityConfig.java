@@ -21,6 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+        web
+                .ignoring()
+                .antMatchers("/h2-console/**");
     }
 
     @Override
@@ -31,10 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .ignoringAntMatchers("/api/sign_up/check_dup").ignoringAntMatchers("/user/signup");
 
         http.authorizeRequests()
-                // 회원 관리 처리 API 전부를 login 없이 허용
-//                .antMatchers("/user/**").permitAll()
-//                .antMatchers("/signup").permitAll()
-//                .antMatchers("/login/**").permitAll()
+//                 회원 관리 처리 API 전부를 login 없이 허용
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/signup").permitAll()
+                .antMatchers("/user/signup").permitAll()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 // Swagger
                 .antMatchers("/swagger-ui.html", "/swagger/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
                 // 그 외 어떤 요청이든 '인증'
@@ -44,7 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                     // 로그인 처리 후 성공 시 URL
                     .defaultSuccessUrl("/")
-
+                    // 로그인 처리 (POST /user/login)
+                    .loginProcessingUrl("/user/login")
                     .permitAll()
                 .and()
                     // [로그아웃 기능]

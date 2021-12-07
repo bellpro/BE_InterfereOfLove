@@ -43,7 +43,7 @@ public class ArticleController {
 
     // 게시글 삭제 (게시글 상세 페이지)
     @ApiOperation("게시글 삭제하기") //swagger api 리스트에 보여질 이름
-    @DeleteMapping("api/article/{article_id}")
+    @DeleteMapping("/api/article/{article_id}")
     public Long deleteArticle (@PathVariable Long article_id) {
         // 선택한 게시글 삭제
         articleRepository.deleteById(article_id);
