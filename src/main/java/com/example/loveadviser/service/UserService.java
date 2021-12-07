@@ -5,14 +5,10 @@ import com.example.loveadviser.model.User;
 import com.example.loveadviser.repository.UserRepository;
 import com.example.loveadviser.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
-
 
 @RequiredArgsConstructor
 @Service

@@ -39,7 +39,6 @@ public class Article extends Timestamped {
         this.content = articleRequestDto.getContent();
     }
 
-
     // 클라이언트 요청 DTO 로 DB 업데이트
     public void update(ArticleRequestDto articleRequestDto) {
         this.title = articleRequestDto.getTitle();
