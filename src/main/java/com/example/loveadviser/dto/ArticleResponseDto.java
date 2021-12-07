@@ -19,21 +19,4 @@ public class ArticleResponseDto {
     private String title;               // 제목
     private String content;             // 내용
     private LocalDateTime createDate;   // 생성일자
-
-    public static List<ArticleResponseDto> listOf(List<Article> articles) {
-        List<ArticleResponseDto> articleResponseDtos = new ArrayList<>();
-
-        for (Article article : articles) {
-            ArticleResponseDto articleResponseDto = new ArticleResponseDto(
-                    article.getArticle_id(),
-                    article.getType(),
-                    article.getUser().getNickname(),
-                    article.getTitle(),
-                    article.getContent(),
-                    article.getCreateDate()
-            );
-            articleResponseDtos.add(articleResponseDto);
-        }
-        return articleResponseDtos;
-    }
 }
