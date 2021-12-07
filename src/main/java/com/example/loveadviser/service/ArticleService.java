@@ -42,7 +42,7 @@ public class ArticleService {
 
         // Response 형식에 맞춰서 리턴
         return new ArticleResponseDto(article.getArticle_id(), article.getType(),
-                article.getUser().getNickname(), article.getTitle(), article.getCreateDate());
+                article.getUser().getNickname(), article.getTitle(), article.getContent(), article.getCreateDate());
     }
 
     @Transactional  // 메소드 SQL 쿼리문 선언
