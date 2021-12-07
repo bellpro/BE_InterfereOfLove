@@ -1,7 +1,19 @@
 package com.example.loveadviser.validator;
 
+<<<<<<< HEAD
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+=======
+import com.example.loveadviser.dto.SignupRequestDto;
+import com.example.loveadviser.model.User;
+import com.example.loveadviser.repository.UserRepository;
+import com.example.loveadviser.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+>>>>>>> b04626cc0cfdee84db0b73c0b38938f2857a7871
 
 import java.util.regex.Pattern;
 
