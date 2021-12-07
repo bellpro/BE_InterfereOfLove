@@ -46,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/contents").permitAll()
                 .antMatchers("/content/**").permitAll()
                 .antMatchers("/api/sign_up/check_dup").permitAll()
+                // Swagger
+                .antMatchers("/swagger-ui.html", "/swagger/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
                 // 메인페이지 API를 login 없이 허용
                 .antMatchers("/").permitAll()
                 // 그 외 어떤 요청이든 '인증'
