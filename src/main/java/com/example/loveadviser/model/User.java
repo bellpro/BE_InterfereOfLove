@@ -1,5 +1,6 @@
 package com.example.loveadviser.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,4 +25,12 @@ public class User {
 
     @Column (nullable = false)
     private String password;
+
+    @Builder
+    public User(Long user_id, String username, String nickname, String password) {
+        this.user_id = user_id;
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+    }
 }
