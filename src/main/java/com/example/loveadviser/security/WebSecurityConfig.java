@@ -1,18 +1,41 @@
 package com.example.loveadviser.security;
 
+import com.example.loveadviser.security.filter.FormLoginFilter;
+import com.example.loveadviser.security.filter.JwtAuthFilter;
+import com.example.loveadviser.security.jwt.HeaderTokenExtractor;
+import com.example.loveadviser.security.provider.FormLoginAuthProvider;
+import com.example.loveadviser.security.provider.JWTAuthProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final JWTAuthProvider jwtAuthProvider;
+    private final HeaderTokenExtractor headerTokenExtractor;
+
+    public WebSecurityConfig(
+            JWTAuthProvider jwtAuthProvider,
+            HeaderTokenExtractor headerTokenExtractor
+    ) {
+        this.jwtAuthProvider = jwtAuthProvider;
+        this.headerTokenExtractor = headerTokenExtractor;
+    }
 
     @Bean
     public BCryptPasswordEncoder encodePassword() {
@@ -20,47 +43,118 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(AuthenticationManagerBuilder auth) {
+        auth
+                .authenticationProvider(formLoginAuthProvider())
+                .authenticationProvider(jwtAuthProvider);
+    }
+
+    @Override
     public void configure(WebSecurity web) {
+        // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
         web
                 .ignoring()
-                .antMatchers("/h2-console/**");
+                .antMatchers("/h2-console/**")
+                .antMatchers("/v2/api-docs", "/swagger-resources/**", "**/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        // 아래처럼 하면 해당되는 URL에 대해서만 무시, 위처럼 하면 다 무시.
-//                .ignoringAntMatchers("/user/**").ignoringAntMatchers("/api/write")
-//                .ignoringAntMatchers("/api/sign_up/check_dup").ignoringAntMatchers("/user/signup");
+
+        // 서버에서 인증은 JWT로 인증하기 때문에 Session의 생성을 막습니다.
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+/*
+         * 1.
+         * UsernamePasswordAuthenticationFilter 이전에 FormLoginFilter, JwtFilter 를 등록합니다.
+         * FormLoginFilter : 로그인 인증을 실시합니다.
+         * JwtFilter       : 서버에 접근시 JWT 확인 후 인증을 실시합니다.
+         */
+        http
+                .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests()
-//                 회원 관리 처리 API 전부를 login 없이 허용
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/signup").permitAll()
-                .antMatchers("/user/signup").permitAll()
-                .antMatchers("/login/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                // Swagger
                 .antMatchers("/swagger-ui.html", "/swagger/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
-                // 그 외 어떤 요청이든 '인증'
-                .anyRequest().authenticated()
+                .anyRequest()
+                .permitAll()
                 .and()
-                    // [로그인 기능]
-                    .formLogin()
-                    // 로그인 처리 후 성공 시 URL
-                    .defaultSuccessUrl("/")
-                    // 로그인 처리 (POST /user/login)
-                    .loginProcessingUrl("/user/login")
-                    .permitAll()
+                // [로그아웃 기능]
+                .logout()
+                // 로그아웃 요청 처리 URL
+                .logoutUrl("/user/logout")
+                .permitAll()
                 .and()
-                    // [로그아웃 기능]
-                    .logout()
-                    // 로그아웃 요청 처리 URL
-                    .logoutUrl("/user/logout")
-                    .permitAll()
-                .and()
-                    // "접근 불가" 페이지 URL 설정
-                    .exceptionHandling()
-                    .accessDeniedPage("/forbidden.html");
+                .exceptionHandling()
+                // "접근 불가" 페이지 URL 설정
+                .accessDeniedPage("/forbidden.html");
+    }
+
+    @Bean
+    public FormLoginFilter formLoginFilter() throws Exception {
+        FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
+        formLoginFilter.setFilterProcessesUrl("/user/login");
+        formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
+        formLoginFilter.afterPropertiesSet();
+        return formLoginFilter;
+    }
+
+    @Bean
+    public FormLoginSuccessHandler formLoginSuccessHandler() {
+        return new FormLoginSuccessHandler();
+    }
+
+    @Bean
+    public FormLoginAuthProvider formLoginAuthProvider() {
+        return new FormLoginAuthProvider(encodePassword());
+    }
+
+    private JwtAuthFilter jwtFilter() throws Exception {
+        List<String> skipPathList = new ArrayList<>();
+
+        // h2-console 허용
+        skipPathList.add("GET,/h2-console/**");
+        skipPathList.add("POST,/h2-console/**");
+        // 회원 관리 API 허용
+        skipPathList.add("GET,/user/**");
+        skipPathList.add("POST,/user/signup");
+        // Swagger
+        skipPathList.add("GET, /swagger-ui.html");
+        skipPathList.add("GET, /swagger/**");
+        skipPathList.add("GET, /swagger-resources/**");
+        skipPathList.add("GET, /webjars/**");
+        skipPathList.add("GET, /v2/api-docs");
+
+        skipPathList.add("POST, /swagger-ui.html");
+        skipPathList.add("POST, /swagger/**");
+        skipPathList.add("POST, /swagger-resources/**");
+        skipPathList.add("POST, /webjars/**");
+        skipPathList.add("POST, /v2/api-docs");
+
+        // 기본 허용 사항들
+        skipPathList.add("GET,/");
+        skipPathList.add("GET,/favicon.ico");
+
+        FilterSkipMatcher matcher = new FilterSkipMatcher(
+                skipPathList,
+                "/**"
+        );
+
+        JwtAuthFilter filter = new JwtAuthFilter(
+                matcher,
+                headerTokenExtractor
+        );
+        filter.setAuthenticationManager(super.authenticationManagerBean());
+
+        return filter;
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
