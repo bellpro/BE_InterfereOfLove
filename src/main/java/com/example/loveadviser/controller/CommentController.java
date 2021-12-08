@@ -26,14 +26,14 @@ public class CommentController {
 
     // 게시글에 대한 모든 댓글 조회하기
     @ApiOperation("모든 댓글 조회하기") //swagger api 리스트에 보여질 이름
-    @GetMapping("/api/article/{article_id}/comment")
+    @GetMapping("/api/{article_id}/comment")
     public List<CommentResponseDto> getComments(@PathVariable Long article_id) {
         return commentService.getAllComments(article_id);
     }
 
     // 댓글 작성하기
     @ApiOperation("댓글 작성하기") //swagger api 리스트에 보여질 이름
-    @PostMapping("/api/article/{article_id}/comment")
+    @PostMapping("/api/comment/{article_id}")
     public void saveComments(@PathVariable Long article_id, @RequestBody String comment, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         String comm = comment;
@@ -45,7 +45,7 @@ public class CommentController {
 
     // 댓글 삭제하기
     @ApiOperation("댓글 삭제하기") //swagger api 리스트에 보여질 이름
-    @DeleteMapping("/api/article/{article_id}/commnet/{comment_id}")
+    @DeleteMapping("/api/comment/{comment_id}")
     public void deleteComment(@PathVariable Long comment_id) {
         Comment comment = commentRepository.findById(comment_id)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
@@ -54,7 +54,7 @@ public class CommentController {
 
     // 댓글 좋아요 토글
     @ApiOperation("댓글 좋아요 토글") //swagger api 리스트에 보여질 이름
-    @PostMapping("/api/article/{article_id}/{comment_id}/like")
+    @PostMapping("/api/comment/{comment_id}/like")
     public void updateLike(@PathVariable Long comment_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         Comment comment = commentRepository.findById(comment_id)
