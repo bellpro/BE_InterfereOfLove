@@ -1,10 +1,7 @@
 package com.example.loveadviser.model;
 
 import com.example.loveadviser.dto.ArticleRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -40,8 +37,8 @@ public class Article extends Timestamped {
     }
 
     // 클라이언트 요청 DTO 로 DB 업데이트
-    public void update(ArticleRequestDto articleRequestDto) {
-        this.title = articleRequestDto.getTitle();
-        this.content = articleRequestDto.getContent();
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }

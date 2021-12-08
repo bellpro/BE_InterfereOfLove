@@ -29,8 +29,24 @@ public class TestDataRunner implements ApplicationRunner {
         // 테스트 User 생성
         User testUser1 = new User("pikachu", "pika", passwordEncoder.encode("123"));
         User testUser2 = new User("ggobugi", "ggobug", passwordEncoder.encode("123"));
+        User testUser3 = new User("user1", "nick1", passwordEncoder.encode("123"));
+        User testUser4 = new User("user2", "nick2", passwordEncoder.encode("123"));
+        User testUser5 = new User("user3", "nick3", passwordEncoder.encode("123"));
+        User testUser6 = new User("user4", "nick4", passwordEncoder.encode("123"));
+        User testUser7 = new User("user5", "nick5", passwordEncoder.encode("123"));
+        User testUser8 = new User("user6", "nick6", passwordEncoder.encode("123"));
+        User testUser9 = new User("user7", "nick7", passwordEncoder.encode("123"));
+        User testUser10 = new User("user8", "nick8", passwordEncoder.encode("123"));
         testUser1 = userRepository.save(testUser1);
         testUser2 = userRepository.save(testUser2);
+        testUser3 = userRepository.save(testUser3);
+        testUser4 = userRepository.save(testUser4);
+        testUser5 = userRepository.save(testUser5);
+        testUser6 = userRepository.save(testUser6);
+        testUser7 = userRepository.save(testUser7);
+        testUser8 = userRepository.save(testUser8);
+        testUser9 = userRepository.save(testUser9);
+        testUser10 = userRepository.save(testUser10);
 
         // 테스트 Article 생성
         ArticleRequestDto articleRequestDto1 = new ArticleRequestDto("GreenLight", "그린라이트인가요?", "이거 그린라이트 맞나요?");

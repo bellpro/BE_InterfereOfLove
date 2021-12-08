@@ -38,8 +38,8 @@ public class ArticleController {
     @ApiOperation("게시글 수정하기") //swagger api 리스트에 보여질 이름
     @PutMapping("/api/article/{article_id}")
     public Long updateArticle (@PathVariable Long article_id, @RequestBody ArticleRequestDto articleRequestDto) {
-        // 선택한 게시글, 클라이언트 요청 DTO 전달
-        articleService.updateArticle(article_id, articleRequestDto);
+        // 선택한 게시글, 클라이언트 요청 DTO 전달 (제목, 내용만)
+        articleService.updateArticle(article_id, articleRequestDto.getTitle(), articleRequestDto.getContent());
         return article_id;
     }
 
