@@ -1,14 +1,9 @@
 package com.example.loveadviser.dto;
 
-import com.example.loveadviser.model.Article;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -19,4 +14,6 @@ public class ArticleResponseDto {
     private String title;               // 제목
     private String content;             // 내용
     private LocalDateTime createDate;   // 생성일자
+    private int greenCount;             // 그린 카운트
+    private int redCount;               // 레드 카운트
 }

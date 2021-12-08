@@ -2,6 +2,9 @@ package com.example.loveadviser.controller;
 
 import com.example.loveadviser.dto.ArticleRequestDto;
 import com.example.loveadviser.dto.ArticleResponseDto;
+import com.example.loveadviser.model.Article;
+import com.example.loveadviser.model.Comment;
+import com.example.loveadviser.model.User;
 import com.example.loveadviser.repository.ArticleRepository;
 import com.example.loveadviser.security.UserDetailsImpl;
 import com.example.loveadviser.service.ArticleService;
@@ -50,4 +53,23 @@ public class ArticleController {
         return article_id;
     }
 
+    // 그린 라이트 체크
+    @ApiOperation("그린 라이트") //swagger api 리스트에 보여질 이름
+    @PostMapping("/api/article/{article_id}/green")
+    public void updateGreen (@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long article_id) {
+        User user = userDetails.getUser();
+        Article article = articleRepository.findById(article_id)
+                .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다."));
+        articleService.updateGreen(user, article);
+    }
+
+    // 레드 라이트 체크
+    @ApiOperation("레드 라이트") //swagger api 리스트에 보여질 이름
+    @PostMapping("/api/article/{article_id}/red")
+    public void updateRed (@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long article_id) {
+        User user = userDetails.getUser();
+        Article article = articleRepository.findById(article_id)
+                .orElseThrow(() -> new IllegalArgumentException("찾는 게시글이 없습니다."));
+        articleService.updateRed(user, article);
+    }
 }
