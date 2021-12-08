@@ -3,7 +3,6 @@ package com.example.loveadviser.controller;
 import com.example.loveadviser.dto.ArticleRequestDto;
 import com.example.loveadviser.dto.ArticleResponseDto;
 import com.example.loveadviser.model.Article;
-import com.example.loveadviser.model.Comment;
 import com.example.loveadviser.model.User;
 import com.example.loveadviser.repository.ArticleRepository;
 import com.example.loveadviser.security.UserDetailsImpl;

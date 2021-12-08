@@ -25,6 +25,7 @@ public class User {
     @Column (nullable = false)
     private String password;
 
+
     public User(SignupRequestDto signupRequestDto, String encodePassword ) {
         this.username = signupRequestDto.getUsername();
         this.nickname = signupRequestDto.getNickname();
