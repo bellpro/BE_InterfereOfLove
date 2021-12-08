@@ -40,6 +40,7 @@ public class TestDataRunner implements ApplicationRunner {
         testArticle1 = articleRepository.save(testArticle1);
         testArticle2 = articleRepository.save(testArticle2);
 
+
         // 테스트 Comment 생성
         Comment comment1 = new Comment(testUser1, testArticle1, "테스트코멘트 1번");
         Comment comment2 = new Comment(testUser1, testArticle1, "테스트코멘트 2번");
