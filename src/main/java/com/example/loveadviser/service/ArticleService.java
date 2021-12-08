@@ -7,6 +7,9 @@ import com.example.loveadviser.model.Article;
 import com.example.loveadviser.model.User;
 import com.example.loveadviser.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +21,14 @@ import java.util.List;
 public class ArticleService {
     private final ArticleRepository articleRepository;
 
-    //전체 게시글 조회
-    public List<ArticleDto> getArticles() {
-        //작성날짜기준 내림차순
-        List<Article> articles = articleRepository.findAll(Sort.by(Sort.Direction.DESC,"createDate"));
-        return ArticleDto.listOf(articles);
+    //전체 게시글 조회 - 페이징(작성일자 기준 내림차순)
+    @Transactional
+    public List<ArticleDto> getArticles(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Article> articles = articleRepository.findAll(pageable);
 
+        return ArticleDto.listOf(articles.getContent());
     }
 
     @Transactional  // 메소드 SQL 쿼리문 선언

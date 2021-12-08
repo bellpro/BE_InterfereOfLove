@@ -1,10 +1,7 @@
 package com.example.loveadviser.model;
 
 import com.example.loveadviser.dto.ArticleRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 

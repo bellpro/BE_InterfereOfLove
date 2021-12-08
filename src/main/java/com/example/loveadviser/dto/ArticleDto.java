@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class ArticleDto {
     private String type;                // 게시글 유형 (그린, 고민)
     private String nickname;            // 닉네임
     private String title;               // 제목
-    private LocalDateTime createDate;   // 생성일자
+    private String createDate;   // 생성일자
 
     public static List<ArticleDto> listOf(List<Article> articles) {
         List<ArticleDto> articleDtos = new ArrayList<>();
@@ -26,7 +27,7 @@ public class ArticleDto {
                     article.getType(),
                     article.getUser().getNickname(),
                     article.getTitle(),
-                    article.getCreateDate()
+                    article.getCreateDate().format(DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss"))
             );
             articleDtos.add(articleDto);
         }
