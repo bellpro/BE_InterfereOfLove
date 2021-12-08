@@ -69,14 +69,14 @@ public class ArticleService {
 
     // 게시글 수정
     @Transactional  // 메소드 SQL 쿼리문 선언
-    public void updateArticle(Long article_id, ArticleRequestDto articleRequestDto) {
+    public void updateArticle(Long article_id, String title, String content) {
         // 선택한 게시글 찾기
         Article article = articleRepository.findById(article_id).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
         // 게시글 DB 업데이트
-        article.update(articleRequestDto);
+        article.update(title, content);
     }
 
     // 게시글 상세_그린라이트
