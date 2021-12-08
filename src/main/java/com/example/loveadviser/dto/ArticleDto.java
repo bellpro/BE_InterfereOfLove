@@ -20,6 +20,7 @@ public class ArticleDto {
     public static List<ArticleDto> listOf(List<Article> articles) {
         List<ArticleDto> articleDtos = new ArrayList<>();
 
+
         for (Article article : articles) {
             ArticleDto articleDto = new ArticleDto(
                     article.getArticle_id(),
