@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ArticleRequestDto {
     private String type;        // 게시글 유형 (그린, 고민)
     private String title;       // 제목

@@ -10,6 +10,9 @@ import com.example.loveadviser.model.User;
 import com.example.loveadviser.repository.ArticleRepository;
 import com.example.loveadviser.repository.CountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +27,14 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CountRepository countRepository;
 
-    //전체 게시글 조회
-    public List<ArticleDto> getArticles() {
-        //작성날짜기준 내림차순
-        List<Article> articles = articleRepository.findAll(Sort.by(Sort.Direction.DESC,"createDate"));
-        return ArticleDto.listOf(articles);
+    //전체 게시글 조회 - 페이징(작성일자 기준 내림차순)
+    @Transactional
+    public List<ArticleDto> getArticles(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Article> articles = articleRepository.findAll(pageable);
 
+        return ArticleDto.listOf(articles.getContent());
     }
 
     // 게시글 작성
@@ -64,14 +69,14 @@ public class ArticleService {
 
     // 게시글 수정
     @Transactional  // 메소드 SQL 쿼리문 선언
-    public void updateArticle(Long article_id, ArticleRequestDto articleRequestDto) {
+    public void updateArticle(Long article_id, String title, String content) {
         // 선택한 게시글 찾기
         Article article = articleRepository.findById(article_id).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
         // 게시글 DB 업데이트
-        article.update(articleRequestDto);
+        article.update(title, content);
     }
 
     // 게시글 상세_그린라이트
