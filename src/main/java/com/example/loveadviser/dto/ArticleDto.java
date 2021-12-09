@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ArticleDto {
     private Long article_id;            // 게시글 ID
+    private String username;
     private String type;                // 게시글 유형 (그린, 고민)
     private String nickname;            // 닉네임
     private String title;               // 제목
@@ -25,6 +26,7 @@ public class ArticleDto {
         for (Article article : articles) {
             ArticleDto articleDto = new ArticleDto(
                     article.getArticle_id(),
+                    article.getUser().getUsername(),
                     article.getType(),
                     article.getUser().getNickname(),
                     article.getTitle(),
