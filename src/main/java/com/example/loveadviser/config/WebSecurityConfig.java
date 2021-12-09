@@ -1,5 +1,7 @@
-package com.example.loveadviser.security;
+package com.example.loveadviser.config;
 
+import com.example.loveadviser.security.FilterSkipMatcher;
+import com.example.loveadviser.security.FormLoginSuccessHandler;
 import com.example.loveadviser.security.filter.FormLoginFilter;
 import com.example.loveadviser.security.filter.JwtAuthFilter;
 import com.example.loveadviser.security.jwt.HeaderTokenExtractor;
@@ -58,9 +60,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-
-        http.cors().and();
+        http
+                .cors()
+                .and()
+                .csrf()
+                .disable();
         // 아래 코드는 실패해서 삭제하고 위에 and(); 붙여줌
 //        configurationSource(corsConfigurationSource());
 
@@ -152,18 +156,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.addExposedHeader("Authorization");
-        configuration.setAllowCredentials(true);
-        configuration.addAllowedOriginPattern("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    // CORS 관련 내용 우선 주석처리
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        configuration.addAllowedMethod("*");
+//        configuration.addAllowedHeader("*");
+//        configuration.addExposedHeader("Authorization");
+//        configuration.setAllowCredentials(true);
+//        configuration.addAllowedOriginPattern("*");
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }
