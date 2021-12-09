@@ -17,11 +17,7 @@ public class UserController {
     //회원가입 요청
     @ApiOperation("회원가입 요청")
     @PostMapping("/user/signup")
-    private String registerUser( @RequestBody SignupRequestDto signupRequestDto) {
+    private void registerUser( @RequestBody SignupRequestDto signupRequestDto) {
         userService.registerUser(signupRequestDto);
-
-        return "로그인홈페이지";
     }
 }
-
-
