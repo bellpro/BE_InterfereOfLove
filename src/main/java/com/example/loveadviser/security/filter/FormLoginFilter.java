@@ -12,6 +12,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// 스프링 시큐리티에 있는 UsernamePasswordAuthenticationFilter 필터를 상속받음
+// Login요청해서 아이디, 패스워드를 전달하면 동작함
 public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
     final private ObjectMapper objectMapper;
 
@@ -21,6 +23,8 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+
+    // Login 요청을 하면 로그인 시도를 위해 실행되는 함수
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         UsernamePasswordAuthenticationToken authRequest;
