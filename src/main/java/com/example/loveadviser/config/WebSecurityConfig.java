@@ -8,6 +8,7 @@ import com.example.loveadviser.security.jwt.HeaderTokenExtractor;
 import com.example.loveadviser.security.provider.FormLoginAuthProvider;
 import com.example.loveadviser.security.provider.JWTAuthProvider;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -158,18 +159,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     // CORS 관련 내용 우선 주석처리
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.addAllowedMethod("*");
-//        configuration.addAllowedHeader("*");
-//        configuration.addExposedHeader("Authorization");
-//        configuration.setAllowCredentials(true);
-//        configuration.addAllowedOriginPattern("*");
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.addExposedHeader("Authorization");
+        configuration.setAllowCredentials(true); // 서버가 응답할 때 json을 자바스크립트에서 처리할 수 있도록 함
+        configuration.addAllowedOriginPattern("*");
+
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
