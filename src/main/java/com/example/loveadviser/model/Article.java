@@ -4,6 +4,8 @@ import com.example.loveadviser.dto.ArticleRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,6 +29,9 @@ public class Article extends Timestamped {
 
     @Column (nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<Comment>();
 
     // 인증된 사용자, 클라이언트 요청 DTO 로 DB 저장할 객체 만들기
     public Article (User user, ArticleRequestDto articleRequestDto) {
