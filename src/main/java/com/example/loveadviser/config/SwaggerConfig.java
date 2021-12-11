@@ -30,16 +30,16 @@ public class SwaggerConfig {
     @Bean
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .pathMapping("/")
+                .apiInfo(apiInfo()) // 스웨거 정보 등록
+//                .pathMapping("/")
                 .forCodeGeneration(true)
                 .genericModelSubstitutes(ResponseEntity.class)
                 .ignoredParameterTypes(java.sql.Date.class)
                 .securityContexts(Lists.newArrayList(securityContext()))
                 .securitySchemes(Lists.newArrayList(apiKey()))
-                .useDefaultResponseMessages(false)
+                .useDefaultResponseMessages(true) // 기본으로 세팅되는 200, 401, 403, 404 메시지 표시
                 .select()
-                .apis(RequestHandlerSelectors.any()) //package 설정
+                .apis(RequestHandlerSelectors.basePackage("com.example.loveadviser.controller")) //package 설정
                 .paths(PathSelectors.any()) //package 안에서 정해진 path 만 swagger로 보여짐
                 .build();
     }
