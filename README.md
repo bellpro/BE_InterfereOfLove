@@ -7,8 +7,8 @@
 
 <br />   
   
-- [\[사이트 바로가기\]](https://www.naver.com/)  
-- [\[시연영상 구경하기\]](https://www.naver.com/)  
+- [\[사이트 바로가기\]](http://interfere.s3-website.ap-northeast-2.amazonaws.com)  
+- [\[시연영상 구경하기\]](https://youtu.be/2x7vr6RrlzE)  
 
 <br />
 
