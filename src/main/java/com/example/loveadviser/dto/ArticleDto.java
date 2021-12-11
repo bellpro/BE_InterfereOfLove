@@ -30,7 +30,7 @@ public class ArticleDto {
                     article.getType(),
                     article.getUser().getNickname(),
                     article.getTitle(),
-                    article.getCreateDate().format(DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss"))
+                    article.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             );
             articleDtos.add(articleDto);
         }

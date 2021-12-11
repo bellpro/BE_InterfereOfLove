@@ -22,9 +22,7 @@ public class HomeController {
     // 만든 날짜 기준 정렬
     @ApiOperation("모든 게시글 조회")
     @GetMapping("/home")
-    public List<ArticleDto> getArticles(
-            @RequestParam int page,
-           @RequestParam int size) {
-        return articleService.getArticles(page, size);
+    public List<ArticleDto> getArticles() {
+        return articleService.getArticles();
     }
 }

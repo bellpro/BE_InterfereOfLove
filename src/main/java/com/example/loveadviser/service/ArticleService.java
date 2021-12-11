@@ -27,14 +27,13 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CountRepository countRepository;
 
-    //전체 게시글 조회 - 페이징(작성일자 기준 내림차순)
+    //전체 게시글 조회 -작성일자 기준 내림차순
     @Transactional
-    public List<ArticleDto> getArticles(int page, int size) {
+    public List<ArticleDto> getArticles() {
         Sort sort = Sort.by(Sort.Direction.DESC, "createDate");
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Article> articles = articleRepository.findAll(pageable);
+       List<Article> articles = articleRepository.findAll(sort);
 
-        return ArticleDto.listOf(articles.getContent());
+        return ArticleDto.listOf(articles);
     }
 
     // 게시글 작성
