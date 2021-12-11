@@ -8,7 +8,6 @@ import com.example.loveadviser.security.jwt.HeaderTokenExtractor;
 import com.example.loveadviser.security.provider.FormLoginAuthProvider;
 import com.example.loveadviser.security.provider.JWTAuthProvider;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,8 +54,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
         web
                 .ignoring()
-                .antMatchers("/h2-console/**")
-                .antMatchers("/v2/api-docs", "/swagger-resources/**", "**/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**");
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/swagger-resources/**",
+                        "**/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        "/swagger/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/health"
+                );
+        //                .antMatchers("/h2-console/**")
     }
 
     @Override
@@ -85,7 +94,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests()
-                .antMatchers("/swagger-ui.html", "/swagger/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs").permitAll()
+                .antMatchers("/v2/api-docs",
+                        "/swagger-resources/**",
+                        "**/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        "/swagger/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/health").authenticated()
                 .anyRequest()
                 .permitAll()
                 .and()
@@ -133,6 +150,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET, /webjars/**");
         skipPathList.add("GET, /v2/api-docs");
 
+        skipPathList.add("POST, /swagger-ui.html");
+        skipPathList.add("POST, /swagger/**");
+        skipPathList.add("POST, /swagger-resources/**");
+        skipPathList.add("POST, /webjars/**");
+        skipPathList.add("POST, /v2/api-docs");
+
         // 기본 허용 사항들
         skipPathList.add("GET,/");
         skipPathList.add("GET,/favicon.ico");
@@ -164,11 +187,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
 
+        configuration.addAllowedOrigin("http://interfere.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true); // 서버가 응답할 때 json을 자바스크립트에서 처리할 수 있도록 함
-        configuration.addAllowedOriginPattern("*");
 
         source.registerCorsConfiguration("/**", configuration);
         return source;
